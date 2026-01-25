@@ -37,6 +37,9 @@ jobs:
       - name: Install development tools
         run: |
             mise install postgres redis
+
+      - name: Start postgres and redis
+        run: |
             mise run postgres -- pg_ctl start
             mise run redis -- redis-server --daemonize yes
 
@@ -48,6 +51,10 @@ jobs:
         run: |
             gem install bundler
             bundle install
+
+      - name: Force inline job execution
+        run: |
+            echo "Rails.application.config.active_job.queue_adapter = :inline" >> config/environments/test.rb
 
       - name: Run Rails test
         run: |
