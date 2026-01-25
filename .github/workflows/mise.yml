@@ -37,6 +37,9 @@ jobs:
       - name: Install development tools
         run: |
             mise install postgres redis
+
+      - name: Start postgres and redis via mise
+        run: |
             mise run postgres -- pg_ctl start
             mise run redis -- redis-server --daemonize yes
 
