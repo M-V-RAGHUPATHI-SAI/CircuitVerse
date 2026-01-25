@@ -37,9 +37,6 @@ jobs:
       - name: Install development tools
         run: |
             mise install postgres redis
-
-      - name: Start postgres and redis via mise
-        run: |
             mise run postgres -- pg_ctl start
             mise run redis -- redis-server --daemonize yes
 
@@ -53,13 +50,8 @@ jobs:
             bundle install
 
       - name: Run Rails test
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/circuitverse_test
-          REDIS_URL: redis://localhost:6379/0
         run: |
-            bin/rails db:setup
-            bin/rails test:prepare
+            bin/rails db:prepare
             bin/rails runner 'require "redis"; Redis.new.ping'
             bin/rails runner 'ActiveRecord::Base.connection.execute("SELECT 1")'
             bin/rails runner 'puts "Hello CircuitVerse!"'
